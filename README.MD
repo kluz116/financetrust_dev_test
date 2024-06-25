@@ -8,7 +8,7 @@ In the given assignment we suggest you to process an automatically generated JSO
 2. Clone.
 3. Create a new branch called `<name>_ftb_dev`.
 4. Create a pull request from your `ftb_dev` branch to the master branch.
-5. Reply to the thread you're having with our HR department telling them we can start reviewing your code
+5. Reply to the thread you're having so we should start reviewing your code
 
 ## Given
 
