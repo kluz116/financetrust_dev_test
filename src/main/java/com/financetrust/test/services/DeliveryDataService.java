@@ -27,13 +27,14 @@ public class DeliveryDataService {
     @Value("classpath:data.json")
     private Resource resource;
     private final ObjectMapper objectMapper;
-    private static DeliveryDataService instance;
     private List<DeliveryData> deliveryDataList;
 
-    private DeliveryDataService() {
+    public DeliveryDataService() {
         objectMapper = new ObjectMapper();
 
     }
+
+
 
     /*
     This only updates the current data list in memory
@@ -46,11 +47,6 @@ public class DeliveryDataService {
 
     }
 
-    public static DeliveryDataService getInstance() {
-        if (instance == null)
-            instance = new DeliveryDataService();
-        return instance;
-    }
 
 
     public UniqueRecipeCountResponse getUniqueRecipeCount() throws IOException {

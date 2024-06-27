@@ -10,9 +10,17 @@ import lombok.Data;
  */
 
 @Data
-@AllArgsConstructor
 public class DeliveryData {
     private String postcode;
     private String recipe;
     private String delivery;
+
+    public DeliveryData() {
+    }
+
+    public DeliveryData(String postcode, String recipe, String delivery) {
+        this.postcode = postcode;
+        this.recipe = recipe;
+        this.delivery = delivery;
+    }
 }

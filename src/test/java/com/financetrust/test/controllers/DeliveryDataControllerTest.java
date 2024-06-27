@@ -84,7 +84,7 @@ class DeliveryDataControllerTest {
 
     @Test
     public void testUploadFixture() throws Exception {
-        MockMultipartFile mockFile = new MockMultipartFile("file", "data.json", "application/json", "{\"key\":\"value\"}".getBytes());
+        MockMultipartFile mockFile = new MockMultipartFile("file", "test.json", "application/json", "{\"key\":\"value\"}".getBytes());
 
         mockMvc.perform(multipart("/upload-fixture")
                         .file(mockFile))
