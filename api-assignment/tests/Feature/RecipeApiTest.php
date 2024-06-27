@@ -11,7 +11,7 @@ class RecipeApiTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function test_example(): void
+    public function testExampleEndpoint(): void
     {
         $response = $this->get('/');
 
@@ -19,14 +19,14 @@ class RecipeApiTest extends TestCase
     }
 
     
-    public function testUniqueRecipes()
+    public function testCountOfUniqueRecipes()
     {
         $response = $this->get('/api/unique-recipe-count');
         $response->assertStatus(200);
         $response->assertJsonStructure(['unique_recipes_count']);
     }
 
-    public function testRecipeCounts()
+    public function testNumberOfRecipeCounts()
     {
         $response = $this->get('/api/count-per-recipe');
         $response->assertStatus(200);
@@ -35,14 +35,14 @@ class RecipeApiTest extends TestCase
         ]);
     }
 
-    public function testBusiestPostcode()
+    public function testFindingBusiestPostcode()
     {
         $response = $this->get('/api/busiest-postcode');
         $response->assertStatus(200);
         $response->assertJsonStructure(['busiest_postcode']);
     }
 
-    public function testRecipeNames()
+    public function testSearchingForRecipeNames()
     {
         
         $response = $this->get('/api/match-by-name?keywords[]=Potato&keywords[]=Veggie&keywords[]=Mushroom');

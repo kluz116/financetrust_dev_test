@@ -18,6 +18,17 @@
                 "summary": "Get the count of unique recipes",
                 "description": "Returns the Count of unique recipe names.",
                 "operationId": "uniqueRecipeCount",
+                "parameters": [
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -39,6 +50,17 @@
                 "summary": "Get the count per recipe",
                 "description": "Returns Count number of occurences for each unique recipe name (alphabetically ordered by recipe name).",
                 "operationId": "countPerRecipe",
+                "parameters": [
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -60,6 +82,17 @@
                 "summary": "Get the postcode with most delivered recipes",
                 "description": "Find the postcode with most delivered recipes.",
                 "operationId": "busiestPostcode",
+                "parameters": [
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Successful operation"
@@ -92,6 +125,15 @@
                             "items": {
                                 "type": "string"
                             }
+                        }
+                    },
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 ],
