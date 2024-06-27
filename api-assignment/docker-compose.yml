@@ -4,12 +4,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: laravel-app
-    container_name: laravel-app
+    image: kiyingi_denis_ftb_dev_app
+    container_name: kiyingi_denis_ftb_dev_app
     restart: unless-stopped
     tty: true
     environment:
-      SERVICE_NAME: laravel-app
+      SERVICE_NAME: kiyingi_denis_ftb_dev_app
       SERVICE_TAGS: dev
     working_dir: /var/www
     volumes:
@@ -30,27 +30,19 @@ services:
       - ./:/var/www
       - ./nginx/conf.d:/etc/nginx/conf.d
 
-  mysql:
-    image: mysql:5.7
-    container_name: mysql
-    restart: unless-stopped
-    tty: true
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_DATABASE: recipes_db
-      MYSQL_ROOT_PASSWORD: secret
-      SERVICE_TAGS: dev
-      SERVICE_NAME: mysql
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: kiyingi_denis_ftb_dev_app
+    container_name: kiyingi_denis_ftb_dev_app_test
+    working_dir: /var/www
     volumes:
-      - mysql_data:/var/lib/mysql/
+      - ./:/var/www
     networks:
       - app-network
+    entrypoint: ["./vendor/bin/phpunit", "--testdox"]
 
 networks:
   app-network:
     driver: bridge
-
-volumes:
-  mysql_data:
-    driver: local
