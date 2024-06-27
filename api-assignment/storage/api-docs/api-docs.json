@@ -1,48 +1,86 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Laravel API Documentation",
-        "description": "API documentation for the Laravel project",
+        "title": "Recipe Fixture Statistics API Documentation",
+        "description": "This API provides functionality for managing and querying recipe data json file. It allows to retrieve information about various recipes, search for recipes by specific keywords, and analyze recipe data such as the number of unique recipes, recipe counts, and the most frequently delivered recipes. The API is built using Laravel and is documented using Swagger/OpenAPI. This documentation provides detailed information about each endpoint, including parameters, responses, and example requests.",
+        "termsOfService": "https://www.financetrust.co.ug/terms/",
+        "contact": {
+            "email": "kiyingidenispaul@proton.me"
+        },
         "version": "1.0.0"
     },
     "paths": {
         "/api/unique-recipe-count": {
             "get": {
+                "tags": [
+                    "Recipes Statistics API"
+                ],
                 "summary": "Get the count of unique recipes",
-                "operationId": "cf64bb5468e0f156fb023b0e18c925b2",
+                "description": "Returns the Count of unique recipe names.",
+                "operationId": "uniqueRecipeCount",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
                     }
                 }
             }
         },
         "/api/count-per-recipe": {
             "get": {
+                "tags": [
+                    "Recipes Statistics API"
+                ],
                 "summary": "Get the count per recipe",
-                "operationId": "fb6c30701382f9f7bd4a85e5fe1b6c68",
+                "description": "Returns Count number of occurences for each unique recipe name (alphabetically ordered by recipe name).",
+                "operationId": "countPerRecipe",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
                     }
                 }
             }
         },
         "/api/busiest-postcode": {
             "get": {
+                "tags": [
+                    "Recipes Statistics API"
+                ],
                 "summary": "Get the postcode with most delivered recipes",
-                "operationId": "6792323cb06be0efb9c347bd088789eb",
+                "description": "Find the postcode with most delivered recipes.",
+                "operationId": "busiestPostcode",
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
                     }
                 }
             }
         },
         "/api/match-by-name": {
             "get": {
+                "tags": [
+                    "Recipes Statistics API"
+                ],
                 "summary": "Get recipes matching specific keywords",
-                "operationId": "3f77cfa5638ce2b3ab3aac2f9d673cd7",
+                "description": "List the recipe names (alphabetically ordered) that contain in their name one of the following words: [Potato, Veggie, Mushroom]",
+                "operationId": "matchByName",
                 "parameters": [
                     {
                         "name": "keywords",
@@ -60,6 +98,12 @@
                 "responses": {
                     "200": {
                         "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
                     }
                 }
             }

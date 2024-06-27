@@ -21,14 +21,14 @@ class RecipeApiTest extends TestCase
     
     public function testUniqueRecipes()
     {
-        $response = $this->get('/api/unique-recipes');
+        $response = $this->get('/api/unique-recipe-count');
         $response->assertStatus(200);
         $response->assertJsonStructure(['unique_recipes_count']);
     }
 
     public function testRecipeCounts()
     {
-        $response = $this->get('/api/recipe-counts');
+        $response = $this->get('/api/count-per-recipe');
         $response->assertStatus(200);
         $response->assertJsonStructure([
             '*' => []
@@ -44,8 +44,15 @@ class RecipeApiTest extends TestCase
 
     public function testRecipeNames()
     {
-        $response = $this->get('/api/recipe-names?keywords[]=Potato&keywords[]=Veggie&keywords[]=Mushroom');
+        
+        $response = $this->get('/api/match-by-name?keywords[]=Potato&keywords[]=Veggie&keywords[]=Mushroom');
         $response->assertStatus(200);
-        $response->assertJsonStructure(['*']);
+        
+        // Check if the response is an array
+        $response->assertJsonIsArray();
+        
+        // Check if specific expected recipe names are in the response
+        $response->assertJsonFragment(["Grilled Cheese and Veggie Jumble"]);
+        $response->assertJsonFragment(["Mediterranean Baked Veggies"]);
     }
 }
