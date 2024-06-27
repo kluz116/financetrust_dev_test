@@ -1,0 +1,68 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Laravel API Documentation",
+        "description": "API documentation for the Laravel project",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/unique-recipe-count": {
+            "get": {
+                "summary": "Get the count of unique recipes",
+                "operationId": "cf64bb5468e0f156fb023b0e18c925b2",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/count-per-recipe": {
+            "get": {
+                "summary": "Get the count per recipe",
+                "operationId": "fb6c30701382f9f7bd4a85e5fe1b6c68",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/busiest-postcode": {
+            "get": {
+                "summary": "Get the postcode with most delivered recipes",
+                "operationId": "6792323cb06be0efb9c347bd088789eb",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        },
+        "/api/match-by-name": {
+            "get": {
+                "summary": "Get recipes matching specific keywords",
+                "operationId": "3f77cfa5638ce2b3ab3aac2f9d673cd7",
+                "parameters": [
+                    {
+                        "name": "keywords",
+                        "in": "query",
+                        "description": "List of keywords to match",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        }
+    }
+}
