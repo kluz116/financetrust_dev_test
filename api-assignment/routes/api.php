@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/aggregated-data', [RecipeController::class, 'aggregatedData']);
 Route::get('/unique-recipe-count', [RecipeController::class, 'uniqueRecipeCount']);
 Route::get('/count-per-recipe', [RecipeController::class, 'countPerRecipe']);
 Route::get('/busiest-postcode', [RecipeController::class, 'busiestPostcode']);

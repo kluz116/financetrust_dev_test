@@ -10,6 +10,50 @@
         "version": "1.0.0"
     },
     "paths": {
+        "/api/aggregated-data": {
+            "get": {
+                "tags": [
+                    "Generate Result JSON file"
+                ],
+                "summary": "Aggregate and return comprehensive recipe statistics",
+                "description": "\nThis endpoint aggregates various recipe statistics into a single response. It includes the following data:\n- **Uniqua Recipe-Count**: The total number of unique recipes in the dataset.\n- **Count Per Recipe**: The number of occurrences for each unique recipe, sorted alphabeticaly by recipe name.\n- **Busiest Postcode**: The postcode with the highest numb2r of recipe deliveries and the count of deliveries to that postcode.\n- **Matched Recipe Names**: A list of recipe names that match any of the provided keywords, sorted alphabetically.\n\nOptionally, a Custom fixtures file can also be provided (passed) to override the default dataset used for the statistics.\nKeywords for matching recipe names can also be provided as a query parameter.\n\nThis processed data results provides the expexted out of a json string in a file including recipe distributions and required stats .\n\nThe result is also stored in a JSON file located in the `public/results` directory, and the file path is included in the response.\n",
+                "operationId": "aggregatedData",
+                "parameters": [
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "keywords",
+                        "in": "query",
+                        "description": "List of keywords to match in recipe names (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
         "/api/unique-recipe-count": {
             "get": {
                 "tags": [
