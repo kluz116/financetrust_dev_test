@@ -44,7 +44,7 @@ class RecipeController extends Controller
                     $this->loadData($filePath);
                     return true;
                 } else {
-                    return false;
+                    return false;//fixture provided but failed to resolve a valid json file path.
                 }
             }else{
                 return true;//use default if fixtures_file not attached
@@ -76,8 +76,8 @@ class RecipeController extends Controller
     public function uniqueRecipeCount(Request $request)
     {
        
-        if(!$this->useCustomFixtureFile($request)){
-           return response()->json(['error' => 'Invalid file ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
+        if(!$this->useCustomFixtureFile($request)){//check if custom fixture file is available else use default data file
+           return response()->json(['error' => 'Failure to resolve file path ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
         }
 
         $recipes = array_column($this->data, 'recipe');
@@ -107,7 +107,7 @@ class RecipeController extends Controller
     public function countPerRecipe(Request $request)
     {
         if(!$this->useCustomFixtureFile($request)){
-            return response()->json(['error' => 'Invalid file ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
+            return response()->json(['error' => 'Failure to resolve file path ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
         }
 
          
@@ -139,7 +139,7 @@ class RecipeController extends Controller
     public function busiestPostcode(Request $request)
     {
         if(!$this->useCustomFixtureFile($request)){
-            return response()->json(['error' => 'Invalid file ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
+            return response()->json(['error' => 'Failure to resolve file path ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
         } 
 
         $postcodes = array_column($this->data, 'postcode');
@@ -181,7 +181,7 @@ class RecipeController extends Controller
     public function matchByName(Request $request)
     {
         if(!$this->useCustomFixtureFile($request)){
-            return response()->json(['error' => 'Invalid file ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
+            return response()->json(['error' => 'Failure to resolve file path ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
         }
  
 
