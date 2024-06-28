@@ -2,7 +2,7 @@
     "openapi": "3.0.0",
     "info": {
         "title": "Recipe Fixture Statistics API Documentation",
-        "description": "This API provides functionality for managing and querying recipe data json file. It allows to retrieve information about various recipes, search for recipes by specific keywords, and analyze recipe data such as the number of unique recipes, recipe counts, and the most frequently delivered recipes. The API is built using Laravel and is documented using Swagger/OpenAPI. This documentation provides detailed information about each endpoint, including parameters, responses, and example requests.",
+        "description": "This API provides functionality for processing and querying recipe data json file to output a result json file. It allows to retrieve information about various recipes, search for recipes by specific keywords, and analyze recipe data such as the number of unique recipes, recipe counts, and the most frequently delivered recipes. The API is built using Laravel and is documented using Swagger/OpenAPI. This documentation provides detailed information about each endpoint, including parameters, responses, and example requests.",
         "termsOfService": "https://www.financetrust.co.ug/terms/",
         "contact": {
             "email": "kiyingidenispaul@proton.me"

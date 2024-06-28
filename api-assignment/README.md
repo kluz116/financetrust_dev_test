@@ -1,6 +1,6 @@
 # Recipe Statistics API Project
 
-This project provides a set of API endpoints to process and automatically generated JSON file with  data and various calculate  statistics as in requireements.
+This project provides a set of API endpoints to process data and automatically generate a JSON file with  data and various calculated statistics as in the requireements.
 
 ## Features
 - Aggregate and generate comprehensive recipe statistics data into a JSON file
@@ -86,17 +86,19 @@ The aggregated data is stored in a JSON file located in the `public/results` dir
 #### Endpoint
 GET /api/aggregated-data
 
-#### Parameters
-- `fixtures_file` (optional): Path to custom .json fixtures file.
-- `keywords` (optional): List of keywords to match in recipe names.
+- **Parameters**:
+    - `fixtures_file` (optional): Path to custom .json fixtures file.
+    - `keywords` (optional): List of keywords to match in recipe names.
+
 
 #### Example Request
-
+```http
 GET /api/aggregated-data?keywords[]=Potato&keywords[]=Veggie
-
+```
 #### Example Response
-
+```json
 {
+  "json_result_file_path": "http://localhost:8080/results/aggregated_data.json",
   "data": {
     "unique_recipe_count": 15,
     "count_per_recipe": [
@@ -122,9 +124,10 @@ GET /api/aggregated-data?keywords[]=Potato&keywords[]=Veggie
       "Speedy Steak Fajitas",
       "Tex-Mex Tilapia"
     ]
-  },
-  "json_result_file_path": "http://localhost:8080/results/aggregated_data.json"
+  }
+  
 }
+```
 ### Additional API Endpoints
 
 - **Get recipes matching specific keywords**:
