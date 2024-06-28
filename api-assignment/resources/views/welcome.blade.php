@@ -99,7 +99,7 @@
                 <p>Hey there, developer! Ready to whip up some Recipes' Statistics?</p>
                 <p>Checkout the API documentation to get along with the endpoints.</p>
                 <a href="/api/documentation" class="button">View & Test API</a><br>
-                <a href="/api/documentation">Get into Repos</a><br><br>
+                <a href="https://github.com/kidepo/financetrust_dev_test.git">Get into Repos</a><br><br>
                 <a href="https://www.financetrust.co.ug/">Finance-Trust</a>
             </div>
         </div>

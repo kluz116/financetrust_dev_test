@@ -31,7 +31,7 @@ This project provides a set of API endpoints to process an automatically generat
     ```sh
     ./setup.sh
     ```
-
+    - If you hit any snag during app setup, can manually check out the detailed setup instructions in the setup script in `financetrust_dev_test/api-assignment/setup.sh`
 ## Run Instructions
 
 1. **Ensure Docker containers are running**:
@@ -43,6 +43,7 @@ This project provides a set of API endpoints to process an automatically generat
 
     - **API Documentation**: [http://localhost:8080/api/documentation](http://localhost:8080/api/documentation)
     - **API Endpoints**: Can directly test using Swagger web views or use Postman or any API client. 
+    - **HOME**: [http://localhost:8080/](http://localhost:8080/). 
 
 ## Running Unit Tests
 
@@ -50,7 +51,7 @@ This project provides a set of API endpoints to process an automatically generat
     ```sh
     docker-compose exec app ./vendor/bin/phpunit --testdox
     ```
-    - or simply run
+    - or simply run in application root directory
 
     ```sh
     docker-compose run --rm test
