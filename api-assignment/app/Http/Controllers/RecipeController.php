@@ -98,53 +98,57 @@ The result is also stored in a JSON file located in the `public/results` directo
 */
     public function aggregatedData(Request $request)//This method xcreates a .json file of the results
     {
-        if (!$this->useCustomFixtureFile($request)) {
+        try{
+            if (!$this->useCustomFixtureFile($request)) {
+                return response()->json([
+                    'error' => 'Failure to resolve file path [' . $request->fixtures_file . ']. Please provide a valid .json fixtures file, or do not pass fixtures_file to use the default.'
+                ], 400);
+            }
+
+            // Get unique recip count
+            $uniqueRecipesResponse = $this->uniqueRecipeCount($request);
+            $uniqueRecipes = json_decode($uniqueRecipesResponse->getContent(), true);
+
+            // Getcount per recipe
+            $countPerRecipeResponse = $this->countPerRecipe($request);
+            $countPerRecipe = json_decode($countPerRecipeResponse->getContent(), true);
+
+            // Get bUsiest postcode
+            $busiestPostcodeResponse = $this->busiestPostcode($request);
+            $busiestPostcode = json_decode($busiestPostcodeResponse->getContent(), true);
+
+            // Get match by-name
+            $matchByNameResponse = $this->matchByName($request);
+            $matchByName = json_decode($matchByNameResponse->getContent(), true);
+
+            // Aggregate the data to be returned
+            $aggregatedData = [
+                'unique_recipe_count' => $uniqueRecipes['unique_recipes_count'],
+                'count_per_recipe' => $countPerRecipe['count_per_recipe'],
+                'busiest_postcode' => $busiestPostcode['busiest_postcode'],
+                'match_by_name' => $matchByName
+            ];
+
+            // Convert the aggregated data to JSON and store it on a json file
+            $jsonData = json_encode($aggregatedData, JSON_PRETTY_PRINT);
+
+            // Write the JSON data FiLe into /public/results/
+            $resultsPath = public_path('results/aggregated_data.json');
+
+            if (!File::exists(public_path('results'))) {
+                File::makeDirectory(public_path('results'), 0755, true);
+            }
+            File::put($resultsPath, $jsonData);
+
+            //return response()->json($aggregatedData);
             return response()->json([
-                'error' => 'Failure to resolve file path [' . $request->fixtures_file . ']. Please provide a valid .json fixtures file, or do not pass fixtures_file to use the default.'
-            ], 400);
+                'json_result_file_path' => url('results/aggregated_data.json'),
+                'data' => $aggregatedData
+                
+            ]);
+        } catch (\Exception $e) {
+            return  response()->json(['error' => 'AN Error Occurred during processing'], 500);
         }
-
-        // Get unique recip count
-        $uniqueRecipesResponse = $this->uniqueRecipeCount($request);
-        $uniqueRecipes = json_decode($uniqueRecipesResponse->getContent(), true);
-
-        // Getcount per recipe
-        $countPerRecipeResponse = $this->countPerRecipe($request);
-        $countPerRecipe = json_decode($countPerRecipeResponse->getContent(), true);
-
-        // Get bUsiest postcode
-        $busiestPostcodeResponse = $this->busiestPostcode($request);
-        $busiestPostcode = json_decode($busiestPostcodeResponse->getContent(), true);
-
-        // Get match by-name
-        $matchByNameResponse = $this->matchByName($request);
-        $matchByName = json_decode($matchByNameResponse->getContent(), true);
-
-        // Aggregate the data to be returned
-        $aggregatedData = [
-            'unique_recipe_count' => $uniqueRecipes['unique_recipes_count'],
-            'count_per_recipe' => $countPerRecipe['count_per_recipe'],
-            'busiest_postcode' => $busiestPostcode['busiest_postcode'],
-            'match_by_name' => $matchByName
-        ];
-
-        // Convert the aggregated data to JSON and store it on a json file
-        $jsonData = json_encode($aggregatedData, JSON_PRETTY_PRINT);
-
-        // Write the JSON data FiLe into /public/results/
-        $resultsPath = public_path('results/aggregated_data.json');
-
-        if (!File::exists(public_path('results'))) {
-            File::makeDirectory(public_path('results'), 0755, true);
-        }
-        File::put($resultsPath, $jsonData);
-
-        //return response()->json($aggregatedData);
-        return response()->json([
-            'json_result_file_path' => url('results/aggregated_data.json'),
-            'data' => $aggregatedData
-            
-        ]);
     }
 
      /**
