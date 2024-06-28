@@ -1,0 +1,16 @@
+{
+  "name": "financetrust_dev_test",
+  "version": "1.0.0",
+  "description": "In the given assignment we suggest you to process an automatically generated JSON file with some data and calculated some stats. Please ensure that you read, understand and follow instructions.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "fs": "^0.0.1-security"
+  }
+}
