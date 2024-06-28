@@ -8,6 +8,10 @@ This project provides a set of API endpoints to process an automatically generat
 - Count unique recipes
 - Retrieve recipes statistics
 - Use custom fixture files for testing
+## Technology Stack
+
+- Laravel Framework 10.48.14
+- PHP 8.1
 
 ## Prerequisites
 

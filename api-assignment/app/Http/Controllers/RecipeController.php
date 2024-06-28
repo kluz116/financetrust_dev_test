@@ -79,10 +79,10 @@ class RecipeController extends Controller
         if(!$this->useCustomFixtureFile($request)){//check if custom fixture file is available else use default data file
            return response()->json(['error' => 'Failure to resolve file path ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
         }
-
+        // Extract the 'recipe' column from the data array into a new array called $recipes.
         $recipes = array_column($this->data, 'recipe');
-        $uniqueRecipes = array_unique($recipes);
-        return response()->json(['unique_recipes_count' => count($uniqueRecipes)]);
+        $uniqueRecipes = array_unique($recipes);//remove duplicates
+        return response()->json(['unique_recipes_count' => count($uniqueRecipes)]);//return the count of unique recipes
     }
 
      /**
@@ -112,9 +112,10 @@ class RecipeController extends Controller
 
          
         $recipes = array_column($this->data, 'recipe');
+        // Count the occurrences of each recipe in the $recipes array.
         $recipeCounts = array_count_values($recipes);
-        ksort($recipeCounts);
-        return response()->json($recipeCounts);
+        ksort($recipeCounts);//Sort the recipe counts by their keys
+        return response()->json($recipeCounts);//Return the array as a json array
     }
 
     /**
@@ -143,9 +144,10 @@ class RecipeController extends Controller
         } 
 
         $postcodes = array_column($this->data, 'postcode');
+        // Count the occurrences of each postcode
         $postcodeCounts = array_count_values($postcodes);
-        arsort($postcodeCounts);
-        $busiestPostcode = array_key_first($postcodeCounts);
+        arsort($postcodeCounts);// Sorting the counts in descending order
+        $busiestPostcode = array_key_first($postcodeCounts);//returning the first up, is the biggest
         return response()->json(['busiest_postcode' => $busiestPostcode]);
     }
 
@@ -184,15 +186,16 @@ class RecipeController extends Controller
             return response()->json(['error' => 'Failure to resolve file path ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
         }
  
-
+        // Get keywords frm request or use default ones if none are provided...
         $keywords = $request->input('keywords', ['Potato', 'Veggie', 'Mushroom']);
     
-        // Ensure $keywords is an array
+        // Ensure $keywords is an array else if string is passed, form an array of them
         if (!is_array($keywords)) {
             $keywords = explode(',', $keywords);
         }
     
         $recipes = array_column($this->data, 'recipe');
+        // Filter recipes that contain any of the keywords provided as storing in $filteredRecipes
         $filteredRecipes = array_filter($recipes, function ($recipe) use ($keywords) {
             foreach ($keywords as $keyword) {
                 if (stripos($recipe, $keyword) !== false) {
@@ -201,6 +204,7 @@ class RecipeController extends Controller
             }
             return false;
         });
+         // Remove duplicate andf sort
         $uniqueFilteredRecipes = array_unique($filteredRecipes);
         sort($uniqueFilteredRecipes);
         return response()->json(array_values($uniqueFilteredRecipes));
