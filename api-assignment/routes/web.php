@@ -17,8 +17,9 @@ use App\Http\Controllers\RecipeController;
 Route::get('/', function () {
     return view('welcome');
 });
-
+/*
 Route::get('/api/unique-recipe-count', [RecipeController::class, 'uniqueRecipeCount']);
 Route::get('/api/count-per-recipe', [RecipeController::class, 'countPerRecipe']);
 Route::get('/api/busiest-postcode', [RecipeController::class, 'busiestPostcode']);
 Route::get('/api/match-by-name', [RecipeController::class, 'matchByName']);
+*/

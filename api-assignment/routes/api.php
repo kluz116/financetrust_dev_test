@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\RecipeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,9 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-/*
-Route::get('/api/unique-recipe-count', [RecipeController::class, 'uniqueRecipeCount']);
-Route::get('/api/count-per-recipe', [RecipeController::class, 'countPerRecipe']);
-Route::get('/api/busiest-postcode', [RecipeController::class, 'busiestPostcode']);
-Route::get('/api/match-by-name', [RecipeController::class, 'matchByName']);
-*/
+
+Route::get('/unique-recipe-count', [RecipeController::class, 'uniqueRecipeCount']);
+Route::get('/count-per-recipe', [RecipeController::class, 'countPerRecipe']);
+Route::get('/busiest-postcode', [RecipeController::class, 'busiestPostcode']);
+Route::get('/match-by-name', [RecipeController::class, 'matchByName']);
