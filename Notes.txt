@@ -1,0 +1,19 @@
+// transfer jar file to the system
+scp -i "new-vision-key-pair.pem" build/libs/test-0.0.1-SNAPSHOT.jar  ec2-user@ec2-52-207-255-31.compute-1.amazonaws.com:~/fintrust
+
+
+//transfer docker to server
+scp -i "new-vision-key-pair.pem"  build/libs/Dockerfile  ec2-user@ec2-52-207-255-31.compute-1.amazonaws.com:~/fintrust
+
+//transfer data
+scp -i "new-vision-key-pair.pem"  build/libs/data.json  ec2-user@ec2-52-207-255-31.compute-1.amazonaws.com:~/fintrust
+
+
+//login into the server
+ssh -i "new-vision-key-pair.pem" ec2-user@ec2-52-207-255-31.compute-1.amazonaws.com
+
+//stop a docker instance
+
+//build new image
+
+//run container
