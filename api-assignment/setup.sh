@@ -21,6 +21,10 @@ docker-compose up -d --build
 echo "Installing PHP dependencies..."
 docker-compose exec app composer install
 
+# Dump Composer autoload
+echo "Dumping Composer autoload..."
+docker-compose exec app composer dump-autoload
+
 # Generate application key
 echo "Generating application key..."
 docker-compose exec app php artisan key:generate
@@ -28,6 +32,10 @@ docker-compose exec app php artisan key:generate
 # Generate Swagger documentation
 echo "Generating Swagger API documentation..."
 docker-compose exec app php artisan l5-swagger:generate
+
+# Set correct permissions for the vendor directory
+echo "Setting correct permissions..."
+docker-compose exec app chown -R www-data:www-data /var/www/html/vendor
 
 # How to access!!
 echo "Setup complete! You can now access the API documentation and also run tests & mockups at http://localhost:8080/api/documentation"
