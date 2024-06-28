@@ -1,0 +1,198 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Recipe Fixture Statistics API Documentation",
+        "description": "This API provides functionality for processing and querying recipe data json file to output a result json file. It allows to retrieve information about various recipes, search for recipes by specific keywords, and analyze recipe data such as the number of unique recipes, recipe counts, and the most frequently delivered recipes. The API is built using Laravel and is documented using Swagger/OpenAPI. This documentation provides detailed information about each endpoint, including parameters, responses, and example requests.",
+        "termsOfService": "https://www.financetrust.co.ug/terms/",
+        "contact": {
+            "email": "kiyingidenispaul@proton.me"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/aggregated-data": {
+            "get": {
+                "tags": [
+                    "Generate Result JSON file"
+                ],
+                "summary": "Aggregate and return comprehensive recipe statistics",
+                "description": "\nThis endpoint aggregates various recipe statistics into a single response. It includes the following data:\n- **Uniqua Recipe-Count**: The total number of unique recipes in the dataset.\n- **Count Per Recipe**: The number of occurrences for each unique recipe, sorted alphabeticaly by recipe name.\n- **Busiest Postcode**: The postcode with the highest numb2r of recipe deliveries and the count of deliveries to that postcode.\n- **Matched Recipe Names**: A list of recipe names that match any of the provided keywords, sorted alphabetically.\n\nOptionally, a Custom fixtures file can also be provided (passed) to override the default dataset used for the statistics.\nKeywords for matching recipe names can also be provided as a query parameter.\n\nThis processed data results provides the expexted out of a json string in a file including recipe distributions and required stats .\n\nThe result is also stored in a JSON file located in the `public/results` directory, and the file path is included in the response.\n",
+                "operationId": "aggregatedData",
+                "parameters": [
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "keywords",
+                        "in": "query",
+                        "description": "List of keywords to match in recipe names (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/unique-recipe-count": {
+            "get": {
+                "tags": [
+                    "Recipes Statistics API"
+                ],
+                "summary": "Get the count of unique recipes",
+                "description": "Returns the Count of unique recipe names.",
+                "operationId": "uniqueRecipeCount",
+                "parameters": [
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/count-per-recipe": {
+            "get": {
+                "tags": [
+                    "Recipes Statistics API"
+                ],
+                "summary": "Get the count per recipe",
+                "description": "Returns Count number of occurences for each unique recipe name (alphabetically ordered by recipe name).",
+                "operationId": "countPerRecipe",
+                "parameters": [
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/busiest-postcode": {
+            "get": {
+                "tags": [
+                    "Recipes Statistics API"
+                ],
+                "summary": "Get the postcode with most delivered recipes",
+                "description": "Find the postcode with most delivered recipes.",
+                "operationId": "busiestPostcode",
+                "parameters": [
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        },
+        "/api/match-by-name": {
+            "get": {
+                "tags": [
+                    "Recipes Statistics API"
+                ],
+                "summary": "Get recipes matching specific keywords",
+                "description": "List the recipe names (alphabetically ordered) that contain in their name one of the following words: [Potato, Veggie, Mushroom]",
+                "operationId": "matchByName",
+                "parameters": [
+                    {
+                        "name": "keywords",
+                        "in": "query",
+                        "description": "List of keywords to match",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    {
+                        "name": "fixtures_file",
+                        "in": "query",
+                        "description": "Path to custom .json fixtures file (optional)",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource not found"
+                    }
+                }
+            }
+        }
+    }
+}
