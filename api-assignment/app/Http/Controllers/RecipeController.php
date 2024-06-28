@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\File;
  * @OA\Info(
  *      version="1.0.0",
  *      title="Recipe Fixture Statistics API Documentation",
- *      description="This API provides functionality for managing and querying recipe data json file. It allows to retrieve information about various recipes, search for recipes by specific keywords, and analyze recipe data such as the number of unique recipes, recipe counts, and the most frequently delivered recipes. The API is built using Laravel and is documented using Swagger/OpenAPI. This documentation provides detailed information about each endpoint, including parameters, responses, and example requests.",
+ *      description="This API provides functionality for processing and querying recipe data json file to output a result json file. It allows to retrieve information about various recipes, search for recipes by specific keywords, and analyze recipe data such as the number of unique recipes, recipe counts, and the most frequently delivered recipes. The API is built using Laravel and is documented using Swagger/OpenAPI. This documentation provides detailed information about each endpoint, including parameters, responses, and example requests.",
  *      termsOfService="https://www.financetrust.co.ug/terms/",
  *      @OA\Contact(
  *          email="kiyingidenispaul@proton.me"
@@ -52,6 +52,99 @@ class RecipeController extends Controller
         } catch (\Exception $e) {
             return false;
         }
+    }
+
+   /**
+ * @OA\Get(
+ *     path="/api/aggregated-data",
+ *     operationId="aggregatedData",
+ *     tags={"Generate Result JSON file"},
+ *     summary="Aggregate and return comprehensive recipe statistics",
+ *     description="
+This endpoint aggregates various recipe statistics into a single response. It includes the following data:
+- **Uniqua Recipe-Count**: The total number of unique recipes in the dataset.
+- **Count Per Recipe**: The number of occurrences for each unique recipe, sorted alphabeticaly by recipe name.
+- **Busiest Postcode**: The postcode with the highest numb2r of recipe deliveries and the count of deliveries to that postcode.
+- **Matched Recipe Names**: A list of recipe names that match any of the provided keywords, sorted alphabetically.
+
+Optionally, a Custom fixtures file can also be provided (passed) to override the default dataset used for the statistics.
+Keywords for matching recipe names can also be provided as a query parameter.
+
+This processed data results provides the expexted out of a json string in a file including recipe distributions and required stats .
+
+The result is also stored in a JSON file located in the `public/results` directory, and the file path is included in the response.
+",
+*     @OA\Parameter(
+*         name="fixtures_file",
+*         in="query",
+*         required=false,
+*         @OA\Schema(type="string"),
+*         description="Path to custom .json fixtures file (optional)"
+*     ),
+*     @OA\Parameter(
+*         name="keywords",
+*         in="query",
+*         required=false,
+*         @OA\Schema(
+*             type="array",
+*             @OA\Items(type="string")
+*         ),
+*         description="List of keywords to match in recipe names (optional)"
+*     ),
+*     @OA\Response(response=200, description="Successful operation"),
+*     @OA\Response(response=400, description="Bad request"),
+*     @OA\Response(response=404, description="Resource not found"),
+* )
+*/
+    public function aggregatedData(Request $request)//This method xcreates a .json file of the results
+    {
+        if (!$this->useCustomFixtureFile($request)) {
+            return response()->json([
+                'error' => 'Failure to resolve file path [' . $request->fixtures_file . ']. Please provide a valid .json fixtures file, or do not pass fixtures_file to use the default.'
+            ], 400);
+        }
+
+        // Get unique recip count
+        $uniqueRecipesResponse = $this->uniqueRecipeCount($request);
+        $uniqueRecipes = json_decode($uniqueRecipesResponse->getContent(), true);
+
+        // Getcount per recipe
+        $countPerRecipeResponse = $this->countPerRecipe($request);
+        $countPerRecipe = json_decode($countPerRecipeResponse->getContent(), true);
+
+        // Get bUsiest postcode
+        $busiestPostcodeResponse = $this->busiestPostcode($request);
+        $busiestPostcode = json_decode($busiestPostcodeResponse->getContent(), true);
+
+        // Get match by-name
+        $matchByNameResponse = $this->matchByName($request);
+        $matchByName = json_decode($matchByNameResponse->getContent(), true);
+
+        // Aggregate the data to be returned
+        $aggregatedData = [
+            'unique_recipe_count' => $uniqueRecipes['unique_recipes_count'],
+            'count_per_recipe' => $countPerRecipe['count_per_recipe'],
+            'busiest_postcode' => $busiestPostcode['busiest_postcode'],
+            'match_by_name' => $matchByName
+        ];
+
+        // Convert the aggregated data to JSON and store it on a json file
+        $jsonData = json_encode($aggregatedData, JSON_PRETTY_PRINT);
+
+        // Write the JSON data FiLe into /public/results/
+        $resultsPath = public_path('results/aggregated_data.json');
+
+        if (!File::exists(public_path('results'))) {
+            File::makeDirectory(public_path('results'), 0755, true);
+        }
+        File::put($resultsPath, $jsonData);
+
+        //return response()->json($aggregatedData);
+        return response()->json([
+            'json_result_file_path' => url('results/aggregated_data.json'),
+            'data' => $aggregatedData
+            
+        ]);
     }
 
      /**
@@ -106,16 +199,27 @@ class RecipeController extends Controller
      */
     public function countPerRecipe(Request $request)
     {
-        if(!$this->useCustomFixtureFile($request)){
-            return response()->json(['error' => 'Failure to resolve file path ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
+        if (!$this->useCustomFixtureFile($request)) {
+            return response()->json([
+                'error' => 'Failure to resolve file path [' . $request->fixtures_file . ']. Please provide a valid .json fixtures file, or do not pass fixtures_file to use the default.'
+            ], 400);
         }
-
-         
+    
         $recipes = array_column($this->data, 'recipe');
         // Count the occurrences of each recipe in the $recipes array.
         $recipeCounts = array_count_values($recipes);
-        ksort($recipeCounts);//Sort the recipe counts by their keys
-        return response()->json($recipeCounts);//Return the array as a json array
+        ksort($recipeCounts); // Sort the recipe counts by their keys
+    
+        // Format the response
+        $formattedRecipeCounts = [];
+        foreach ($recipeCounts as $recipe => $count) {
+            $formattedRecipeCounts[] = [
+                'recipe' => $recipe,
+                'count' => $count
+            ];
+        }
+    
+        return response()->json(['count_per_recipe' => $formattedRecipeCounts]);
     }
 
     /**
@@ -139,16 +243,24 @@ class RecipeController extends Controller
      */
     public function busiestPostcode(Request $request)
     {
-        if(!$this->useCustomFixtureFile($request)){
-            return response()->json(['error' => 'Failure to resolve file path ['.$request->fixtures_file.']. Please provide a valid .json fixtures file else dont pass fixtures_file to use default.'], 400);
-        } 
-
+        if (!$this->useCustomFixtureFile($request)) {
+            return response()->json([
+                'error' => 'Failure to resolve file path [' . $request->fixtures_file . ']. Please provide a valid .json fixtures file, or do not pass fixtures_file to use the default.'
+            ], 400);
+        }
+    
         $postcodes = array_column($this->data, 'postcode');
         // Count the occurrences of each postcode
         $postcodeCounts = array_count_values($postcodes);
-        arsort($postcodeCounts);// Sorting the counts in descending order
-        $busiestPostcode = array_key_first($postcodeCounts);//returning the first up, is the biggest
-        return response()->json(['busiest_postcode' => $busiestPostcode]);
+        arsort($postcodeCounts); // Sorting the counts in descending order
+        $busiestPostcode = array_key_first($postcodeCounts); // Returning the first one, which is the busiest
+    
+        return response()->json([
+            'busiest_postcode' => [
+                'postcode' => $busiestPostcode,
+                'delivery_count' => $postcodeCounts[$busiestPostcode]
+            ]
+        ]);
     }
 
 /**

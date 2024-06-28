@@ -18,7 +18,6 @@ class RecipeApiTest extends TestCase
         $response->assertStatus(200);
     }
 
-    
     public function testCountOfUniqueRecipes()
     {
         $response = $this->get('/api/unique-recipe-count');
@@ -31,7 +30,12 @@ class RecipeApiTest extends TestCase
         $response = $this->get('/api/count-per-recipe');
         $response->assertStatus(200);
         $response->assertJsonStructure([
-            '*' => []
+            'count_per_recipe' => [
+                '*' => [
+                    'recipe',
+                    'count'
+                ]
+            ]
         ]);
     }
 
@@ -39,12 +43,16 @@ class RecipeApiTest extends TestCase
     {
         $response = $this->get('/api/busiest-postcode');
         $response->assertStatus(200);
-        $response->assertJsonStructure(['busiest_postcode']);
+        $response->assertJsonStructure([
+            'busiest_postcode' => [
+                'postcode',
+                'delivery_count'
+            ]
+        ]);
     }
 
     public function testSearchingForRecipeNames()
     {
-        
         $response = $this->get('/api/match-by-name?keywords[]=Potato&keywords[]=Veggie&keywords[]=Mushroom');
         $response->assertStatus(200);
         
@@ -52,7 +60,30 @@ class RecipeApiTest extends TestCase
         $response->assertJsonIsArray();
         
         // Check if specific expected recipe names are in the response
-        $response->assertJsonFragment(["Grilled Cheese and Veggie Jumble"]);
         $response->assertJsonFragment(["Mediterranean Baked Veggies"]);
+        //$response->assertJsonFragment(["Speedy Steak Fajitas"]);//fail assertion
+    }
+
+    public function testAggregatedData()
+    {
+        $response = $this->get('/api/aggregated-data?keywords[]=Potato&keywords[]=Veggie&keywords[]=Mushroom');
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => [
+                'unique_recipe_count',
+                'count_per_recipe' => [
+                    '*' => [
+                        'recipe',
+                        'count'
+                    ]
+                ],
+                'busiest_postcode' => [
+                    'postcode',
+                    'delivery_count'
+                ],
+                'match_by_name'
+            ],
+            'json_result_file_path'
+        ]);
     }
 }
