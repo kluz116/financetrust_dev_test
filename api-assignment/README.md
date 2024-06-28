@@ -1,9 +1,9 @@
 # Recipe Statistics API Project
 
-This project provides a set of API endpoints to process an automatically generated JSON file with some data and calculate various statistics.
+This project provides a set of API endpoints to process and automatically generated JSON file with  data and various calculate  statistics as in requireements.
 
 ## Features
-
+- Aggregate and generate comprehensive recipe statistics data into a JSON file
 - Get recipes matching specific keywords
 - Count unique recipes
 - Retrieve recipes statistics
@@ -62,6 +62,70 @@ This project provides a set of API endpoints to process an automatically generat
 
 
 ## API Endpoints
+### Aggregated Data Endpoint (Generate Result Json File)
+
+#### Summary
+
+The `aggregated-data` endpoint aggregates various recipe-related statistics into a single response. This endpoint generates a JSON file that includes unique recipe counts, recipe occurrences, busiest postcode, and matched recipe names as required.
+
+#### Description
+
+This endpoint provides a detailed aggregation of recipe data and stores the result in a JSON file. It includes:
+
+- **Unique Recipe Count**: Calculates the total number of unique recipes in the dataset.
+- **Count Per Recipe**: Counts the occurrences of each unique recipe, sorted alphabetically by recipe name.
+- **Busiest Postcode**: identifies the postcde with the highest number of recipe deliveries and the count of deliveries to that postcode.
+- **Matched Recipe Names**: Provides a list of recipe names that match any of the provided keywords, sorted alphabetically.
+
+Optionally, you can provide:
+- **fixtures_file**: A custom fixtures file to override the default dataset.
+- **keywords**: Keywords for matching recipe names to filter specific recipes.
+
+The aggregated data is stored in a JSON file located in the `public/results` directory. The response includes the path to this file for easy access in browesr and downloading it.
+
+#### Endpoint
+GET /api/aggregated-data
+
+#### Parameters
+- `fixtures_file` (optional): Path to custom .json fixtures file.
+- `keywords` (optional): List of keywords to match in recipe names.
+
+#### Example Request
+
+GET /api/aggregated-data?keywords[]=Potato&keywords[]=Veggie
+
+#### Example Response
+
+{
+  "data": {
+    "unique_recipe_count": 15,
+    "count_per_recipe": [
+      {
+        "recipe": "Mediterranean Baked Veggies",
+        "count": 1
+      },
+      {
+        "recipe": "Speedy Steak Fajitas",
+        "count": 1
+      },
+      {
+        "recipe": "Tex-Mex Tilapia",
+        "count": 3
+      }
+    ],
+    "busiest_postcode": {
+      "postcode": "10120",
+      "delivery_count": 1000
+    },
+    "match_by_name": [
+      "Mediterranean Baked Veggies",
+      "Speedy Steak Fajitas",
+      "Tex-Mex Tilapia"
+    ]
+  },
+  "json_result_file_path": "http://localhost:8080/results/aggregated_data.json"
+}
+### Additional API Endpoints
 
 - **Get recipes matching specific keywords**:
     ```http
